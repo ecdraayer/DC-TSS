@@ -15,3 +15,6 @@ https://drive.google.com/drive/folders/1ECwHJetl8EPRkQSMD-rLuWimJ5kMp8qW
 
 ### To Run:
 The jupyternotebook displays a step by step tutorial for segmenting the PAMAP2 TS dataset using the provided .py files.
+
+Evalution Metric Details:
+
