@@ -22,8 +22,11 @@ https://drive.google.com/drive/folders/1ECwHJetl8EPRkQSMD-rLuWimJ5kMp8qW
 Our dataset is comprised of two real and two semi-real. The real datasets are continuously recorded and have ground truth established from external information. Our semi-real datasets are constructed from segments of real MTS data. These segments are logically concatenated together to mimic continuously recorded data to create a large-scale MTS with several regime changes. For example, a dataset may have multiple 30-second recordings of someone walking and using various gym equipment. We concatenate the 30-second segments of gym equipment usage into 15 minute periods with 2 minute walking periods in between. 
 
 -PAMAP2 is a real MTS dataset with 40 variables, 376,417 observations, and 25 regime changes. PAMAP2 records 12 different physical activities performed by a single person from several sensors sampled at 100 Hertz (Hz).
+
 -Daily and Sports Activity (Sports) is a semi-real MTS dataset with 45 variables, 170,250 observations, and 29 regime changes. Sports is constructed from smaller labeled MTS segments from 17 different activities recorded at 25Hz by various motion capture sensors on a person.
+
 -EEG is a real MTS dataset with 64 variables, 259,520 observations, and 13 regime changes. The dataset contains brain wave recordings of a person performing motor/imagery tasks sampled at 160Hz.
+
 -Music is a semi-real MTS dataset with 148 variables, 309,972 observations, and 29 regime changes. The Music dataset is constructed from 30 different songs from various genres and artists and is the power spectral representation of audio recordings sampled at 44,100Hz
 
 ### Dataset Preprocessing
