@@ -14,6 +14,8 @@ EEG: https://physionet.org/content/eegmmidb/1.0.0/
 
 Music: https://archive.ics.uci.edu/datasets?search=FMA:%20A%20Dataset%20For%20Music%20Analysis
 
+WESAD: https://archive.ics.uci.edu/dataset/465/wesad+wearable+stress+and+affect+detection
+
 UV Repository: https://sites.google.com/view/ts-clasp
 
 These datasets are also available in their preprocessed forms:
@@ -30,6 +32,8 @@ Our dataset is comprised of two real and two semi-real. The real datasets are co
 -EEG is a real MTS dataset with 64 variables, 259,520 observations, and 13 regime changes. The dataset contains brain wave recordings of a person performing motor/imagery tasks sampled at 160Hz.
 
 -Music is a semi-real MTS dataset with 148 variables, 309,972 observations, and 29 regime changes. The Music dataset is constructed from 30 different songs from various genres and artists and is the power spectral representation of audio recordings sampled at 44,100Hz
+
+-WESAD is a real physiological and motion MTS dataset. WESAD contain 14 variables, 4496100 to 4949700 observations, and have 16 regime changes. The data is sampled at 700Hz.
 
 -The UV repository was established by Schäfer(https://sites.google.com/view/ts-clasp) and is a collection of 98 univariate TS datasets from various domains. These TS datasets are much shorter than Sports, PAMAP2, EEG, Music with fewer CPs to detect.
 
