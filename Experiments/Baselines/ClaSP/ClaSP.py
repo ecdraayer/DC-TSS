@@ -33,7 +33,7 @@ def main():
         predict = clasp.fit_predict(ts)
         predictions.append(predict)
         t1_stop = process_time()
-        filename = output_name+'_ClaSP_Partitions/' + str(i) + "_iteration.out"
+        filename = "/" + output_name+'/ClaSPd_Results_feature_' + str(i) + "_iteration.out"
         np.savetxt(filename, predict, delimiter=',')
         #times.append(t1_stop - t1_start)
         print('time to process feature ' + str(i) + ':', t1_stop - t1_start)

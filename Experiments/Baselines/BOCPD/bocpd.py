@@ -1,66 +1,35 @@
-import pandas as pd
 import numpy as np
-from numpy import genfromtxt
-import matplotlib.pyplot as plt
-import os
-import csv
-from scipy import stats as st
-from utils import *
 
-import numpy as np
-import os
-import math
-from sklearn.manifold import TSNE
-from sklearn.cluster import AgglomerativeClustering
-from scipy.spatial import distance
-
-
-from sklearn.neighbors import NearestNeighbors
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import normalize
-from scipy.spatial.distance import cosine as cosine_distance
-from typing import Optional, List
-from scipy.io import arff
-
-from scipy.signal import find_peaks
-import ruptures as rpt
 import time
-import sys
 import argparse
-import multiprocessing
 import bocd
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("data")
+    parser.add_argument("output")
     parser.add_argument("start")
     parser.add_argument("stop")
+    parser.add_argument("alpha")
+    parser.add_argument("beta")
+    parser.add_argument("kappa")
+    parser.add_argument("hazard")
     args = parser.parse_args()
 
-    string = args.data
-    start = args.start
-    stop = args.stop
-    print(multiprocessing.cpu_count())
-    print(string)
-    if string  == 'PAMAP2':
-        print("processing PAMAP2")
-        time_series = np.loadtxt("./data/PAMAP2.csv", delimiter=",")
-        hazard = 3600
-    elif string == 'EEG':
-        print("processing EEG")
-        time_series = np.loadtxt("./data/EEG_short.csv", delimiter=",")
-        hazard = 20000
-    elif string == 'MUSIC':
-        print("processing MUSIC")
-        time_series = np.loadtxt("./data/Music_Analysis.csv", delimiter=",")
-        hazard = 20000
-    else:
-        print("processing SPORTS")
-        time_series = np.loadtxt("./data/Sports_Activity.csv", delimiter=",")
-        hazard = 2500
+    ts_file = args.data
+    output_name = args.output
+    feature_index_1 = args.start
+    feature_index_2 = args.stop
+    alpha = args.alpha
+    beta = args.beta
+    kappa = args.kappa
+    hazard = args.hazard
+    
+    time_series = np.loadtxt(ts_file, delimiter=",")
+    
 
-    bc = bocd.BayesianOnlineChangePointDetection(bocd.ConstantHazard(hazard), bocd.StudentT(mu=0, kappa=1, alpha=1, beta=1))
-    selected_features = np.arange(int(start), int(stop)+1, 1)
+    bc = bocd.BayesianOnlineChangePointDetection(bocd.ConstantHazard(hazard), bocd.StudentT(mu=0, kappa=kappa, alpha=alpha, beta=beta))
+    selected_features = np.arange(int(feature_index_1), int(feature_index_2)+1, 1)
 
     for i,ts in enumerate(time_series):
         # Online estimation and get the maximum likelihood r_t at each time point
@@ -75,7 +44,7 @@ def main():
         print('time to process feature ' + str(i) + ':', t1_stop - t1_start) 
         print(i, ts.shape)
         
-        filename = "/fs1/home/edraayer/Bocpd_Results/" + string + "/" + str(i) + "_iteration.out"
+        filename = "/"+output_name+"/Bocpd_Results_feature_" + str(i) + "_iteration.out"
         np.savetxt(filename, rt_mle, delimiter=',')
            
 
