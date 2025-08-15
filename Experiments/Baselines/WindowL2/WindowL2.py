@@ -10,11 +10,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("data")
     parser.add_argument("gt")
+    parser.add_argument("margin")
     
     args = parser.parse_args()
 
     ts_file = args.data
     gt = args.gt
+    margin = args.margin
+    # For PAMAP2 set margin = 30*100
+    # For WESAD set margin = 700*30
     
     
     #ts_file = "\\Users\\Erik\\Documents\\Clustering_MTS_Research\\_MTS_Clustering\\data\\wesad_data_9.csv"
@@ -34,7 +38,6 @@ def main():
     print('time to process TS: ', t1_stop - t1_start)
     print('predictions for feature: ', predictions)
     print(len(predictions))
-    margin = 700*30
     print('margin:',margin)
     print('covering score:',covering(ground_truth, predictions, time_series.shape[0]))
     print('f_measure score:',f_measure(ground_truth, predictions, margin=margin, alpha=0.5, return_PR=True))
