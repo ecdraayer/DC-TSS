@@ -1,88 +1,46 @@
-import pandas as pd
 import numpy as np
-from numpy import genfromtxt
-import matplotlib.pyplot as plt
-import os
-import csv
-from scipy import stats as st
-from utils import *
-
-import numpy as np
-import os
-import math
-from sklearn.manifold import TSNE
-from sklearn.cluster import AgglomerativeClustering
-from scipy.spatial import distance
-
-
-from sklearn.neighbors import NearestNeighbors
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import normalize
-from scipy.spatial.distance import cosine as cosine_distance
-from typing import Optional, List
-from scipy.io import arff
-
-from scipy.signal import find_peaks
 import ruptures as rpt
-import time
+from time import process_time
 import sys
 import argparse
-def main():
+from utils import *
+import os
+
+def main():    
     parser = argparse.ArgumentParser()
     parser.add_argument("data")
+    parser.add_argument("gt")
+    parser.add_argument("margin")
+    
     args = parser.parse_args()
 
-    string = args.data
-    print(string)
-    if string  == 'PAMAP2':
-        print("processing PAMAP2")
-        time_series = np.loadtxt("./data/PAMAP2.csv", delimiter=",")
-        labels = np.loadtxt("./data/PAMAP2_labels.csv", delimiter=",")
-        pens = [24000]
-        jump = 25
-        margin = 3000
-    elif string == 'EEG':
-        print("processing EEG")
-        time_series = np.loadtxt("./data/EEG.csv", delimiter=",")
-        labels = np.loadtxt("./data/EEG_labels.csv", delimiter=",")
-        pens = [6800, 7100, 7500]
-        margin = 4200
-
-    elif string == 'MUSIC':
-        print("processing MUSIC")
-        time_series = np.loadtxt("./data/Music_Analysis.csv", delimiter=",")
-        labels = np.loadtxt("./data/Music_Analysis_labels.csv", delimiter=",")
-        jump = 25
-        pens = [80000]
-        margin = 1800
-
-    else:
-        print("processing SPORTS")
-        time_series = np.loadtxt("./data/Sports_Activity.csv", delimiter=",")
-        labels = np.loadtxt("./data/Sports_Activity_labels.csv", delimiter=",")
-        pens = [6500, 7000]
-        margin = 200
-
-    ground_truth = np.where(labels[:-1] != labels[1:])[0]
-
-
+    ts_file = args.data
+    gt = args.gt
+    margin = args.margin
+    # For PAMAP2 set margin = 30*100
+    # For WESAD set margin = 700*30
     
-    for pen in pens:
-        t1_start = time.time()
-        model = "l2"  # "l2", "rbf"
-        algo = rpt.Pelt(model=model, min_size=2000, jump=jump).fit(time_series.T)  
-        predictions = algo.predict(pen=pen)
-        t1_stop = time.time()
-        print("--- %s seconds ---" % (t1_stop-t1_start))
-        predictions = predictions[:-1]
-        print(predictions)
-        print('penalty:', pen)
-        print('covering score:',covering(ground_truth, predictions, len(labels)))
-        print('f_measure score:',f_measure(ground_truth, predictions, margin=margin, alpha=0.5, return_PR=True))
-        
-        filename = string+"_pelt_predictions_"+str(pen)+".csv"
-        np.savetxt(filename, predictions, delimiter=',')
-     
+    
+    #ts_file = "\\Users\\Erik\\Documents\\Clustering_MTS_Research\\_MTS_Clustering\\data\\wesad_data_9.csv"
+    labels = np.loadtxt(gt, delimiter=",")
+    ground_truth = np.where(labels[:-1] != labels[1:])[0]
+    time_series = np.loadtxt(ts_file, delimiter=",")
+    time_series = time_series.T
+    
+    assert time_series.shape[1] < time_series.shape[0], "Need to transpose time series"
+    
+    t1_start = process_time() 
+    algo = rpt.Pelt(model=model, min_size=2000, jump=10).fit(time_series)  
+    predictions = algo.predict(pen=np.log(time_series.shape[0]) * time_series.shape[1] * 10)
+    predictions = predictions[:-1]
+    t1_stop = process_time()
+
+    print('time to process TS: ', t1_stop - t1_start)
+    print('predictions for feature: ', predictions)
+    print(len(predictions))
+    print('margin:',margin)
+    print('covering score:',covering(ground_truth, predictions, time_series.shape[0]))
+    print('f_measure score:',f_measure(ground_truth, predictions, margin=margin, alpha=0.5, return_PR=True))
 
 if __name__ == "__main__":
     main()
