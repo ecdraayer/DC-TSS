@@ -3,31 +3,41 @@ import ruptures as rpt
 from time import process_time
 import sys
 import argparse
-
+from utils import *
+import os
 
 def main():    
     parser = argparse.ArgumentParser()
     parser.add_argument("data")
-    parser.add_argument("output")
-
+    parser.add_argument("gt")
+    
     args = parser.parse_args()
 
     ts_file = args.data
-    output_name = args.output
-
+    gt = args.gt
+    
+    
+    #ts_file = "\\Users\\Erik\\Documents\\Clustering_MTS_Research\\_MTS_Clustering\\data\\wesad_data_9.csv"
+    labels = np.loadtxt(gt, delimiter=",")
+    ground_truth = np.where(labels[:-1] != labels[1:])[0]
     time_series = np.loadtxt(ts_file, delimiter=",")
-
-    # Online estimation and get the maximum likelihood r_t at each time point       
+    time_series = time_series.T
+    
+    assert time_series.shape[1] < time_series.shape[0], "Need to transpose time series"
+    
     t1_start = process_time() 
     algo = rpt.Window(model="l2").fit(time_series)
-    predictions = algo.predict(pen=np.log(time_series.shape[0]) * time_series.shape[-1] * 1**2)
+    predictions = algo.predict(pen=np.log(time_series.shape[0]) * time_series.shape[1] * 10)
+    predictions = predictions[:-1]
     t1_stop = process_time()
-    filename = "/"+output_name+"/Window_Results.out"
-    np.savetxt(filename, predictions, delimiter=',')
-    print('time to process feature: ', t1_stop - t1_start)
+
+    print('time to process TS: ', t1_stop - t1_start)
     print('predictions for feature: ', predictions)
-  
-    
+    print(len(predictions))
+    margin = 700*30
+    print('margin:',margin)
+    print('covering score:',covering(ground_truth, predictions, time_series.shape[0]))
+    print('f_measure score:',f_measure(ground_truth, predictions, margin=margin, alpha=0.5, return_PR=True))
 
 if __name__ == "__main__":
     main()
