@@ -216,7 +216,7 @@ def main():
         step = int(data.shape[0]*.025)
         params_LSE['in_channels'] = data.shape[1]
         params_LSE['out_channels'] = data.shape[1]
-        params_LSE['nb_steps'] = 10
+        params_LSE['nb_steps'] = 5
         params_LSE['win_size'] = win_size
         params_LSE['win_type'] = 'hanning' # {rect, hanning}
 
