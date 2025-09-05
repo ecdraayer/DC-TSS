@@ -283,6 +283,6 @@ def main():
     print('margin:',margin)
     print('f_measure score:',f_measure(ground_truth, predictions, margin=margin, alpha=0.5, return_PR=True))
     print(len(predictions))
-    print(np.min(times))
+    print(np.max(times))
 if __name__ == "__main__":
     main() 
