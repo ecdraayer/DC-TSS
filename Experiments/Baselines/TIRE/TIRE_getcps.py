@@ -204,7 +204,7 @@ def main():
     parser.add_argument("margin")
     parser.add_argument("win_size")
     parser.add_argument("cps_output_filename")
-    parser.add_argument("dist")
+    parser.add_argument("frequency")
 
     args = parser.parse_args()
 
@@ -212,6 +212,7 @@ def main():
     gt = args.gt_filename
     margin = args.margin
     cps_filename = args.cps_output_filename
+    freq = args.frequency
     
     # Load data
     timeseries = np.loadtxt(ts_file, delimiter=",")
@@ -273,7 +274,7 @@ def main():
             for c in cp:
                 flat_change_points.append(c)
     flat_change_points = np.array(flat_change_points)
-    dbs = DBSCAN1D(eps=args.dist, min_samples=1)
+    dbs = DBSCAN1D(eps=freq*5, min_samples=1)
     labels = dbs.fit_predict(flat_change_points)
     predictions = []
     for k in np.unique(labels):
