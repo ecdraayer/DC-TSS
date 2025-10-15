@@ -52,5 +52,3 @@ BOCPD and ClaSP are not explicitly designed to handle MTS datasets. In order to 
 ## To Run:
 The jupyternotebook displays a step by step tutorial for segmenting the PAMAP2 TS dataset using the provided .py files.
 
-Evalution Metric Details:
-
